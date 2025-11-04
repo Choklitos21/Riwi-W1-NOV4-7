@@ -14,18 +14,39 @@ def is_Str(text):
 #This function checks if the input is a non-negative number
 def is_valid(number):
     result = number
-    if result < 0:
-            result = is_valid(float(input("Invalid input. Please enter a non-negative value: ")))
+    try:
+        result = float(number)
+        if result >= 0:
+            return result
+        else:
+            result = input("Invalid input. Please enter a valid number (Cannot be less than 0): ")
+            result = is_valid(result)
+    except ValueError:
+        result = input("Invalid input. Please enter a valid input: ")
+        result = is_valid(result)
     return result
+
+#This funcition checks if the input is an integer (not a fraction)
+def is_int(number):
+    result = is_valid(int(number))
+    while True:
+        try:
+            if not isinstance(result, float):
+                return int(result)
+            else:
+                #print("Debug: result on else", result, "as ", str(type(number).__name__))
+                result = input("Invalid input. Please enter a valid number (Cannot be fraction): ")
+        except ValueError:
+            result = input("Invalid input. Please enter a valid input: ")
 
 #Here we set our variables using the functions above
 name = is_Str(str(input("Enter the product name: ")))
 price = is_valid(float(input("Enter the product price: ")))
-amount = is_valid(int(input("Enter the product amount: ")))
+amount = is_int(input("Enter the product amount: "))
 
 #This function calculates the total cost that is price multiplied by amount
 def total_cost(price, amount):
-    return price * amount   
+    return price * amount
 
 #Here we call the function to calculate total cost
 totalCost = total_cost(price, amount)
