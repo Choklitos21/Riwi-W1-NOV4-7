@@ -32,3 +32,5 @@ totalCost = total_cost(price, amount)
 
 #Finally, we print the results
 print(f"Product name: {name}, Price: {price}, Amount: {amount}, Total Cost: {totalCost}")
+
+#The code avobe requests the user to input a product name, price, and amount. It validates the inputs to ensure the name contains only letters and that the price and amount are non-negative. It then calculates the total cost by multiplying the price by the amount and prints out all the details
