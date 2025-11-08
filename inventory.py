@@ -7,7 +7,7 @@ totalCost = 0.0
 #Create a list with a dictionary inside
 inventory = []
 
-def createItem(newName, newPrice, newAmount):
+def addProduct(newName, newPrice, newAmount):
     inventory.append({
         "name": newName,
         "price": newPrice,
@@ -83,7 +83,7 @@ def isValid(number):
         result = isValid(result)
     return result
 
-#This funcition checks if the input is an integer (not a fraction)
+#This function checks if the input is an integer (not a fraction)
 def isInt(number):
     result = isValid(int(number))
     while True:
@@ -95,21 +95,6 @@ def isInt(number):
                 result = input("Invalid input. Please enter a valid number (Cannot be fraction): ")
         except ValueError:
             result = input("Invalid input. Please enter a valid input: ")
-
-#Here we set our variables using the functions above
-# name = isStr(str(input("Enter the product name: ")))
-# price = isValid(float(input("Enter the product price: ")))
-# amount = isInt(input("Enter the product amount: "))
-
-#This function calculates the total cost that is price multiplied by amount
-def totalCost(price, amount):
-    return price * amount
-
-#Here we call the function to calculate total cost
-#totalCost = totalCost(price, amount)
-
-#Finally, we print the results
-#print(f"Product name: {name}, Price: {price}, Amount: {amount}, Total Cost: {totalCost}")
 
 #The code above requests the user to input a product name, price, and amount. It validates the inputs to ensure the
 # name contains only letters and that the price and amount are non-negative. It then calculates the total cost by
@@ -133,7 +118,7 @@ while menu_active:
         option = int(input("\n*Select and option -> "))
 
         if option == 1:
-            createItem(
+            addProduct(
                 isStr(str(input("\nEnter the product name: "))),
                 isValid(float(input("\nEnter the product price: "))),
                 isInt(input("\nEnter the product amount: "))
