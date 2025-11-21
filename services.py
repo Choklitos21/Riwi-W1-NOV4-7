@@ -2,31 +2,29 @@
 def addProduct(inventory):
     addProductFlag = True
     while addProductFlag:
-        name = isStr(str(input("\nEnter the product name: "))),
-        price = isValid(float(input("\nEnter the product price: "))),
+        name = isStr(str(input("\nEnter the product name: "))).lower()
+        price = isValid(input("\nEnter the product price: "))
         amount = isInt(input("\nEnter the product amount: "))
-        if not searchOnInventory(inventory, name):
+        if not searchOnInventory(inventory, name, False):
             inventory.append({
                 "name": name[0],
-                "price": price[0],
+                "price": price,
                 "amount": amount
             })
             print(f"""\n
                 *********** CREATED ***********
                 -------------------------
                 |+ Name: {name[0]}
-                |+ Price: {price[0]}
+                |+ Price: {price}
                 |+ Amount: {amount}
                 |-------------------------
                 """)
-            #return inventory
         else:
             print("Product already exists.")
-            #return None
 
         answerFlag = True
         while answerFlag:
-            answer = str(input("Do you want to add another product?: y/n")).strip().lower()
+            answer = str(input("Do you want to add another product?: y/n ")).strip().lower()
             if answer == "y" or answer == "yes":
                 answerFlag = False
             elif answer == "n" or answer == "no":
@@ -43,7 +41,7 @@ def printInventory(inventory):
             print(f"""\n
                 |+ PRODUCTO #{count}
                 --------------------------
-                |+ Name: {i["name"]}
+                |+ Name: {i["name"].capitalize()}
                 |+ Price: {i["price"]}
                 |+ Amount: {i["amount"]}
                 |-------------------------
@@ -51,27 +49,26 @@ def printInventory(inventory):
             count += 1
     else:
         print("""\n
-            *** No products have been saved yet ***
+            **** No products have been saved yet ****
             """)
 
-def searchOnInventory(inventory, name):
+def searchOnInventory(inventory, name, flag):
     newName = name
     if not newName:
         newName = isStr(str(input("\nEnter the product name: ")))
-    #return dictionary or none
-    print(inventory)
     for i in inventory:
-        if i["name"] == newName:
+        if i["name"] == newName[0]:
             print(f"""\n
             *********** PRODUCT FOUND ***********
             |------------------------------------
-            |+ Name: {i["name"]}
+            |+ Name: {i["name"].capitalize()}
             |+ Price: {i["price"]}
             |+ Amount: {i["amount"]}
             |------------------------------------
             """)
             return i
-    print(f"'{newName}' was not found in the inventory.")
+    if flag:
+        print(f"********* {newName[0]} was not found in the inventory *********")
     return None
 
 def updateProduct(inventory):
@@ -81,7 +78,7 @@ def updateProduct(inventory):
             print(f"""\n
             *********** OLD PRODUCT ***********
             |------------------------------------
-            |+ Name: {i["name"]}
+            |+ Name: {i["name"].capitalize()}
             |+ Price: {i["price"]}
             |+ Amount: {i["amount"]}
             |------------------------------------
@@ -91,7 +88,7 @@ def updateProduct(inventory):
             print(f"""\n
             *********** PRODUCT UPDATED ***********
             |------------------------------------
-            |+ Name: {i["name"]}
+            |+ Name: {i["name"].capitalize()}
             |+ Price: {i["price"]}
             |+ Amount: {i["amount"]}
             |------------------------------------
@@ -101,7 +98,7 @@ def updateProduct(inventory):
     return None
 
 def updatedInfoCheck():
-    name = isStr(str(input("\nEnter the product name: ")))
+    name = isStr(str(input("\nEnter the product name: "))).lower()
 
     priceFlag = True
     while priceFlag:
@@ -132,7 +129,7 @@ def updatedInfoCheck():
 def deleteOneInventory(inventory, name):
     newName = name
     if not newName:
-        newName = isStr(str(input("\nEnter the product name: "))),
+        newName = isStr(str(input("\nEnter the product name: "))).lower(),
     for i in inventory:
         if i["name"] == newName:
             print(f"""
@@ -160,25 +157,38 @@ def deleteOneInventory(inventory, name):
 def calculateStatistics(inventory): #return tuple with statistics
     total_units = 0
     total_value = 0
-    most_expensive = {}
-    most_stock = {}
+    most_expensive = {
+        "name": "",
+        "price": 0,
+        "amount": 0
+    }
+    most_stock = {
+        "name": "",
+        "price": 0,
+        "amount": 0
+    }
 
-    for i in inventory:
-        total_units += i["amount"]
-        total_value += i["amount"] * i["price"]
-        if i["price"] > most_expensive.get("price", 0):
-            most_expensive = i
-        if i["amount"] > most_stock.get("amount", 0):
-            most_stock = i
+    if inventory:
+        for i in inventory:
+            total_units += int(i["amount"])
+            total_value += float(i["amount"]) * float(i["price"])
+            if float(i["price"]) > float(most_expensive["price"]):
+                most_expensive = i
+            if int(i["amount"]) > int(most_stock["amount"]):
+                most_stock = i
+    else:
+        print("""\n
+            **** No products have been saved yet ****
+            """)
+        return inventory
 
     statistics = (total_units, total_value, most_expensive, most_stock)
 
     print(f"""
     |+ Total units: {total_units}
-    |+ Total value: ${total_value}
+    |+ Total value: ${total_value:.2f}
     |+ Most expensive product: {most_expensive["name"]}
     |+ Product with most stock: {most_stock["name"]}
-    |+ 
     """)
 
     return statistics
@@ -209,9 +219,8 @@ def isValid(number):
 
 #This function checks if the input is an integer (not a fraction)
 def isInt(number):
-    result = isValid(int(number))
+    result = isValid(number)
     while True:
-        result = int(result)
         try:
             if not isinstance(result, float):
                 return int(result)

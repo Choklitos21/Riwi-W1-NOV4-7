@@ -1,30 +1,20 @@
 import csv
 
-# inventory = [
-#     {
-#         "name": "Book",
-#         "price": 10.50,
-#         "amount": 10
-#     },
-#     {
-#         "name": "Laptop",
-#         "price": 59.99,
-#         "amount": 10
-#     },
-#     {
-#         "name": "Pencil",
-#         "price": 2.00,
-#         "amount": 10
-#     }
-# ]
-
 def saveCSV(inventory):
+    dataOnCSV = loadCSV()
     with open('inventory.csv', 'w', newline='') as old_file_csv:
         saver = csv.writer(old_file_csv)
         saver.writerow(["Name", "Price", "Amount"])
-        # saver.writerows(inventory)
         for i in inventory:
-            saver.writerow([i["name"], i["price"], i["amount"]])
+            for j in dataOnCSV:
+                if i["name"] == j["name"]:
+                    saver.writerow([j["name"], i["price"], i["amount"]])
+                    break
+                else:
+                    saver.writerow([i["name"], i["price"], i["amount"]])
+                    break
+
+    print("************ PRODUCTS SAVED AS CSV ************")
 
 def loadCSV():
     with open('inventory.csv', 'r') as file_csv:

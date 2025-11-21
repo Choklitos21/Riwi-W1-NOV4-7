@@ -32,7 +32,7 @@ def menu():
             case "2":
                 printInventory(inventory)
             case "3":
-                searchOnInventory(inventory, "")
+                searchOnInventory(inventory, "", True)
             case "4":
                 updateProduct(inventory)
             case "5":
