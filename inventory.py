@@ -93,5 +93,44 @@ def isInt(number):
         except ValueError:
             result = input("Invalid input. Please enter a valid input: ")
 
+#The code above requests the user to input a product name, price, and amount. It validates the inputs to ensure the
+# name contains only letters and that the price and amount are non-negative. It then calculates the total cost by
+# multiplying the price by the amount and prints out all the details
+
+menu_active = True
+
+while menu_active:
+    print("""\n
+        *********** MENU ***********
+    
+        1. Add products
+        2. Show inventory
+        3. Calculate statistics
+        4. EXIT
+        
+        *Enter the option number you want to do*
+    """)
+
+    try:
+        option = int(input("\n*Select and option -> "))
+
+        if option == 1:
+            addProduct(
+                isStr(str(input("\nEnter the product name: "))),
+                isValid(float(input("\nEnter the product price: "))),
+                isInt(input("\nEnter the product amount: "))
+            )
+        elif option == 2:
+            printInventory()
+        elif option == 3:
+            calculateStatistics()
+        elif option == 4:
+            print("\n¡Thanks for using our inventory!")
+            menu_active = False
+        else:
+            print("\nOption not valid, please choose of the menu")
+
+    except ValueError:
+        print("\nOption not valid, please use only numbers")
 
 

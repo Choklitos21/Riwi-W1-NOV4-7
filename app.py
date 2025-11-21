@@ -1,5 +1,15 @@
+from files import loadCSV, saveCSV
+from services import (addProduct,
+                      printInventory,
+                      searchOnInventory,
+                      updateProduct,
+                      deleteOneInventory,
+                      calculateStatistics)
+
+inventory = []
 
 def menu():
+    global inventory
     menuFlag = True
     while menuFlag:
         print("""
@@ -15,28 +25,28 @@ def menu():
         9. EXIT
         """)
 
-        option = str(input("Select and option from 1 to 0 only: "))
+        option = str(input("Select and option from 1 to 9 only: "))
         match option:
             case "1":
-                print("option")
+                addProduct(inventory)
             case "2":
-                print("option")
+                printInventory(inventory)
             case "3":
-                print("option")
+                searchOnInventory(inventory, "")
             case "4":
-                print("option")
+                updateProduct(inventory)
             case "5":
-                print("option")
+                deleteOneInventory(inventory, "")
             case "6":
-                print("option")
+                calculateStatistics(inventory)
             case "7":
-                print("option")
+                saveCSV(inventory)
             case "8":
-                print("option")
+                inventory = loadCSV()
             case "9":
                 print("Program finished")
                 menuFlag = False
             case _:
                 print("Invalid option, try again with numbers from 1 to 7 only")
 
-    pass
+menu()
