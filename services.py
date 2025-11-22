@@ -1,4 +1,4 @@
-
+# This function add a product to the 'inventory'
 def addProduct(inventory):
     addProductFlag = True
     while addProductFlag:
@@ -7,14 +7,14 @@ def addProduct(inventory):
         amount = isInt(input("\nEnter the product amount: "))
         if not searchOnInventory(inventory, name, False):
             inventory.append({
-                "name": name[0],
+                "name": name,
                 "price": price,
                 "amount": amount
             })
             print(f"""\n
                 *********** CREATED ***********
                 -------------------------
-                |+ Name: {name[0]}
+                |+ Name: {name}
                 |+ Price: {price}
                 |+ Amount: {amount}
                 |-------------------------
@@ -34,6 +34,7 @@ def addProduct(inventory):
             else:
                 print("Option not valid, use only y/yes or n/no")
 
+# This functions print all the items inside 'inventory' with an especial format
 def printInventory(inventory):
     count = 1
     if len(inventory) > 0:
@@ -52,6 +53,8 @@ def printInventory(inventory):
             **** No products have been saved yet ****
             """)
 
+# This function search for a specific item inside 'inventory'
+# Returns the product if its found, or None if it doesn't exist
 def searchOnInventory(inventory, name, flag):
     newName = name
     if not newName:
@@ -71,10 +74,12 @@ def searchOnInventory(inventory, name, flag):
         print(f"********* {newName[0]} was not found in the inventory *********")
     return None
 
+# This functions checks if the item exists in the 'inventory' and updates its price and/or amount
+# Returns the product updated if its found, or None if it doesn't exist
 def updateProduct(inventory):
     name, newPrice, newAmount = updatedInfoCheck()
     for i in inventory:
-        if i["name"] == name:
+        if i["name"] == name[0]:
             print(f"""\n
             *********** OLD PRODUCT ***********
             |------------------------------------
@@ -94,9 +99,11 @@ def updateProduct(inventory):
             |------------------------------------
             """)
             return i
-    print(f"{name} was not found in the inventory.")
+    print(f"delete {name[0]} was not found in the inventory.")
     return None
 
+# This functions check if the user wants to update the price and/or the amount of the product
+# Return the name, price and amount that the user just enter
 def updatedInfoCheck():
     name = isStr(str(input("\nEnter the product name: "))).lower()
 
@@ -126,12 +133,14 @@ def updatedInfoCheck():
 
     return name, price, amount
 
+# This functions search for an element and deletes the element if it exists
+# Returns the product that was deleted if its found, or None if it doesn't exist
 def deleteOneInventory(inventory, name):
     newName = name
     if not newName:
         newName = isStr(str(input("\nEnter the product name: "))).lower(),
     for i in inventory:
-        if i["name"] == newName:
+        if i["name"] == newName[0]:
             print(f"""
             *********** DELETED ***********
             -------------------------------
@@ -142,19 +151,16 @@ def deleteOneInventory(inventory, name):
             """)
             inventory.pop(inventory.index(i))
             return inventory
-    print(f"{newName} was not found in the inventory.")
+    print(f"{newName[0]} was not found in the inventory.")
     return None
 
-# Implementa calcular_estadisticas(inventario) para obtener:
-# unidades_totales = suma de cantidad
-# valor_total = suma de precio * cantidad
-# producto_mas_caro (nombre y precio)
-# producto_mayor_stock (nombre y cantidad)
-# Muestra las estadísticas con formato legible.
-# (Opcional) Usa una lambda para calcular el subtotal de cada producto:
-# subtotal = (lambda p: p["precio"] * p["cantidad"])
-
-def calculateStatistics(inventory): #return tuple with statistics
+# This function calculate the next statistics
+# total_units: The total of units between all products in the 'inventory'
+# total_value: The total value of between all products in the 'inventory'
+# most_expensive: The product that has the higher cost
+# most_stock: The product with more units (amount) in the 'inventory'
+# Return a tuple with all the previous variables
+def calculateStatistics(inventory):
     total_units = 0
     total_value = 0
     most_expensive = {
@@ -195,7 +201,8 @@ def calculateStatistics(inventory): #return tuple with statistics
 
 # Verify data
 
-#This function checks if the input is a string containing only letters
+# This function checks if the input is a string containing only letters
+# Return the text if it's correct
 def isStr(text):
     result = text
     if not result.isalpha():
@@ -203,6 +210,7 @@ def isStr(text):
     return str(result)
 
 #This function checks if the input is a non-negative number
+# Return the number if it's correct
 def isValid(number):
     result = number
     try:
@@ -218,8 +226,9 @@ def isValid(number):
     return float(result)
 
 #This function checks if the input is an integer (not a fraction)
+# Return the text if it's correct
 def isInt(number):
-    result = isValid(number)
+    result = int(isValid(number))
     while True:
         try:
             if not isinstance(result, float):
