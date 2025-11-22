@@ -4,58 +4,64 @@ import csv
 # It gave the option to the user to reemplace all inside inventory.csv with the current 'inventory'
 # Or merge the current 'inventory' into the inventory.csv, modifying old elements and adding the new ones
 def saveCSV(inventory):
-    optionFlag = True
-    while optionFlag:
-        option = str(input("""
-        Do you want to replace the information stored in the CSV or merge it?
-         (Merging will keep the names but replace their prices and quantities with those of the new inventory)
-         y/yes To replace it
-         n/no To merge it
-         ->: """)).lower()
+    try:
+        optionFlag = True
+        while optionFlag:
+            option = str(input("""
+            Do you want to replace the information stored in the CSV or merge it?
+             (Merging will keep the names but replace their prices and quantities with those of the new inventory)
+             y/yes To replace it
+             n/no To merge it
+             ->: """)).lower()
 
-        if option == "y" or option == "yes":
-            with open('inventory.csv', 'w', newline='') as old_file_csv:
-                saver = csv.writer(old_file_csv)
-                saver.writerow(["Name", "Price", "Amount"])
-                for i in inventory:
-                    saver.writerow([i["name"], i["price"], i["amount"]])
-            optionFlag = False
+            if option == "y" or option == "yes":
+                with open('inventory.csv', 'w', newline='') as old_file_csv:
+                    saver = csv.writer(old_file_csv)
+                    saver.writerow(["Name", "Price", "Amount"])
+                    for i in inventory:
+                        saver.writerow([i["name"], i["price"], i["amount"]])
+                optionFlag = False
 
-        elif option == "n" or option == "no":
+            elif option == "n" or option == "no":
 
-            dataOnCSV = loadCSV()
-            mergedInventory = []
+                dataOnCSV = loadCSV()
+                mergedInventory = []
 
-            for old_item in dataOnCSV:
-                found = False
+                for old_item in dataOnCSV:
+                    found = False
+
+                    for new_item in inventory:
+                        if old_item["name"] == new_item["name"]:
+                            mergedInventory.append({
+                                "name": old_item["name"],
+                                "price": new_item["price"],
+                                "amount": new_item["amount"]
+                            })
+                            found = True
+                            break
+                    if not found:
+                        mergedInventory.append(old_item)
 
                 for new_item in inventory:
-                    if old_item["name"] == new_item["name"]:
-                        mergedInventory.append({
-                            "name": old_item["name"],
-                            "price": new_item["price"],
-                            "amount": new_item["amount"]
-                        })
-                        found = True
-                        break
-                if not found:
-                    mergedInventory.append(old_item)
+                    if not any(i["name"] == new_item["name"] for i in dataOnCSV):
+                        mergedInventory.append(new_item)
 
-            for new_item in inventory:
-                if not any(i["name"] == new_item["name"] for i in dataOnCSV):
-                    mergedInventory.append(new_item)
+                with open('inventory.csv', 'w', newline='') as old_file_csv:
+                    saver = csv.writer(old_file_csv)
+                    saver.writerow(["Name", "Price", "Amount"])
+                    for item in mergedInventory:
+                        saver.writerow([item["name"], item["price"], item["amount"]])
 
-            with open('inventory.csv', 'w', newline='') as old_file_csv:
-                saver = csv.writer(old_file_csv)
-                saver.writerow(["Name", "Price", "Amount"])
-                for item in mergedInventory:
-                    saver.writerow([item["name"], item["price"], item["amount"]])
+                optionFlag = False
+            else:
+                print("Option not valid, use only y/yes or n/no")
 
-            optionFlag = False
-        else:
-            print("Option not valid, use only y/yes or n/no")
+    except (ValueError, FileNotFoundError, UnicodeDecodeError) as e:
+        print("Error: ", e)
 
     print("************ PRODUCTS SAVED AS CSV ************")
+    print("************ PRODUCTS SAVED ON PATH 'inventory.csv' ************")
+
 
 # Take the info inside inventory.csv and upload it into 'inventory'
 def loadCSV():
