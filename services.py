@@ -88,8 +88,8 @@ def updateProduct(inventory):
             |+ Amount: {i["amount"]}
             |------------------------------------
             """)
-            i["price"] = newPrice
-            i["amount"] = newAmount
+            i["price"] = newPrice if newPrice != None else i["price"]
+            i["amount"] = newAmount if newAmount != None else i["amount"]
             print(f"""\n
             *********** PRODUCT UPDATED ***********
             |------------------------------------
