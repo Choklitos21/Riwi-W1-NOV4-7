@@ -61,6 +61,6 @@ def menu():
                 menuFlag = False
             case _:
                 # Message in case the user chose an option outside number 1 and number 7
-                print("Invalid option, try again with numbers from 1 to 7 only")
+                print("Invalid option, try again with numbers from 1 to 9 only")
 
 menu()
